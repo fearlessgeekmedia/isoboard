@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useKeyboard } from "@opentui/react";
 import type { LatLon, WeatherData } from "./types";
-import type { NwsHourlyPeriod, ForecastPeriod } from "./api";
+import type { NwsHourlyPeriod } from "./api";
 import {
   detectCoordinates,
   fetchNwsPoint,
@@ -12,23 +12,10 @@ import {
   getNearestRadar,
 } from "./api";
 import { CurrentConditions } from "./components/CurrentConditions";
-import { Forecast } from "./components/Forecast";
+import { Forecast, getUniqueDays } from "./components/Forecast";
 import type { ForecastHandle } from "./components/Forecast";
 import { Radar } from "./components/Radar";
 import { Alerts } from "./components/Alerts";
-
-function getUniqueDays(periods: ForecastPeriod[]): string[] {
-  const days: string[] = [];
-  const seen = new Set<string>();
-  for (const period of periods) {
-    const day = period.name.replace(/ (Night|Day)$/, "").trim();
-    if (!seen.has(day)) {
-      seen.add(day);
-      days.push(day);
-    }
-  }
-  return days;
-}
 
 export function App({ initialLatLon }: { initialLatLon?: LatLon }) {
   const [data, setData] = useState<WeatherData | null>(null);
